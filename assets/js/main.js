@@ -1,29 +1,118 @@
-/*
-	Directive by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
+jQuery(window).on('load', function() {
+      
+    
+    // HIDE PRELAODER
+    $(".preloader").addClass("preloader-hidden");
 
-(function($) {
+    // SHOW/ANIMATE ANIMATION CONTAINER
+    setTimeout(function(){
 
-	var	$window = $(window),
-		$body = $('body');
+        $(".hero .animation-container").each(function(){
 
-	// Breakpoints.
-		breakpoints({
-			wide:      [ '1281px',  '1680px' ],
-			normal:    [ '981px',   '1280px' ],
-			narrow:    [ '841px',   '980px'  ],
-			narrower:  [ '737px',   '840px'  ],
-			mobile:    [ '481px',   '736px'  ],
-			mobilep:   [ null,      '480px'  ]
-		});
+            var e = $(this);
 
-	// Play initial animations on page load.
-		$window.on('load', function() {
-			window.setTimeout(function() {
-				$body.removeClass('is-preload');
-			}, 100);
-		});
+            setTimeout(function(){
 
-})(jQuery);
+                e.addClass("run-animation");
+
+            }, e.data("animation-delay") );
+
+        });
+
+    }, 900 );
+
+    
+});
+
+
+jQuery(document).ready(function($) {
+	"use strict";
+    
+    
+    $(window).on('load', function() {
+        
+        // HIDE PRELAODER
+        $(".preloader").addClass("preloader-hidden");
+        
+        // SHOW/ANIMATE ANIMATION CONTAINER
+        setTimeout(function(){
+            
+            $(".hero .animation-container").each(function(){
+
+                var e = $(this);
+
+                setTimeout(function(){
+                    
+                    e.addClass("run-animation");
+                    
+                }, e.data("animation-delay") );
+
+            });
+            
+        }, 900 );
+        
+    });
+    
+    
+    // INIT PARALLAX PLUGIN
+    $(".hero .background-content.parallax-on").parallax({
+        scalarX: 24,
+        scalarY: 15,
+        frictionX: 0.1,
+        frictionY: 0.1,
+    });
+    
+    
+    // OPEN POPUP SEQUENCE
+    $(".open-popup").click(function(){
+        
+        $(".popup").addClass("show");
+        $(".popup").append('<div class="close-popup backface"></div>');
+        
+    });
+
+    // CLOSE POPUP SEQUENCE
+    $(document).on('click', '.close-popup', function(){ 
+        
+        $(".popup").removeClass("show");
+        $(".popup .backface").remove();
+        
+    });
+    
+    
+    // AJAX SUBSCRIBE FORM
+    $('.subscribe-form').submit(function() {
+
+        var postdata = $('.subscribe-form').serialize();
+
+        $.ajax({
+
+            type: 'POST',
+            url: 'assets/php/subscribe.php',
+            data: postdata,
+            dataType: 'json',
+            success: function(json) {
+
+                $('.subscribe-form').removeClass("form-error");
+
+                if(json.valid === 0) {
+                    
+                    $('.subscribe-form').addClass("form-error");
+                    
+                } else {
+
+                    $('.subscribe-form').addClass("form-success");
+                    $('.subscribe-form input,.subscribe-form button').val('').prop('disabled', true);
+                    
+                }
+                
+            }
+
+        });
+
+        return false;
+
+    });
+    
+    
+});
